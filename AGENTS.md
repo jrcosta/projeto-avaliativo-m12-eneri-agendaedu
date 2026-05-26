@@ -97,8 +97,19 @@ Branches obrigatórias:
 
 Regras:
 
-- Criar branches a partir de `develop`.
-- Fazer pull request para integrar mudanças.
+- Para qualquer mudança no repositório, criar uma branch nova a partir de `develop` antes de editar arquivos.
+- Nomear a branch conforme tipo da mudança:
+  - `feature/nome-da-mudanca` para funcionalidade nova;
+  - `fix/nome-da-correcao` para correção;
+  - `docs/nome-da-documentacao` para documentação;
+  - `chore/nome-da-tarefa` para manutenção sem mudança funcional.
+- Fazer a mudança na branch criada.
+- Registrar prompts em `docs/prompts/prompts.md` quando houver interação com IA.
+- Fazer commit semântico seguindo Conventional Commits, como `feat:`, `fix:`, `docs:`, `test:`, `refactor:` ou `chore:`.
+- Fazer push da branch para o remoto.
+- Criar pull request seguindo o padrão do repositório, sempre com `Summary`, `Issue` quando existir, e `Test plan`.
+- Usar `develop` como base padrão para PRs de desenvolvimento.
+- Usar `main` como base apenas para PR final de entrega a partir de `develop`.
 - Manter branches mesmo após merge.
 - Garantir que versão final esteja mergeada em `main`.
 - Ter no mínimo 8 commits.

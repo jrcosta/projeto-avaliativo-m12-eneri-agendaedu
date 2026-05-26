@@ -57,3 +57,9 @@ atualize e branch com a develop, e depois crie a estrutura inicial de pastas do 
 ```text
 crie uma user story para essa implementação, faça commit e push e crie um pr.
 ```
+
+### Prompt 10 — Criar branch e obrigar fluxo de branch, commit e PR
+
+```text
+crie uma branch nova e adicione o seguinte fluxo no agents.md como obrigatorio: criar uma branch criar uma branch feature/nome-da-mudança ou fix/nome-da-correcao ou docs/chore etc > fazer a mudança > commitar com commit semantico > criar um pull request seguindo o padrão do repo.
+```
