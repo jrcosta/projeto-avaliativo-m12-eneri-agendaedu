@@ -123,3 +123,15 @@ salve meus prompts no arqui @docs/prompts/prompts.md, crie uma branch, faça com
 ```text
 quero que ele seja em abas, ao abrir a primeira aba exibe as minhas tarefas e a aba ao lado é cadastrar a tarefa, como está agora mas dividido em abas.
 ```
+
+### Prompt 21 — Refatorar interface visual
+
+```text
+faça a modificação pedida no arquivo @docs\prompts\prompt-refatorar-ui.md
+```
+
+### Prompt 22 — Adicionar suporte a Dark Mode
+
+```text
+ainda no pr 19 coloque uma opção na pagina de tema escuro ou claro.
+```
