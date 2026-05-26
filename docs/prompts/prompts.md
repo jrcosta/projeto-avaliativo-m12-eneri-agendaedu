@@ -129,3 +129,9 @@ quero que ele seja em abas, ao abrir a primeira aba exibe as minhas tarefas e a 
 ```text
 faça a modificação pedida no arquivo @docs\prompts\prompt-refatorar-ui.md
 ```
+
+### Prompt 22 — Adicionar suporte a Dark Mode
+
+```text
+ainda no pr 19 coloque uma opção na pagina de tema escuro ou claro.
+```
