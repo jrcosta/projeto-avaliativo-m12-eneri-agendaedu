@@ -1,4 +1,5 @@
 import type { CreateTaskInput } from "../../domain/tasks/task";
+import { TASK_URGENCIES, TASK_WEIGHTS, TASK_TYPES } from "../../domain/tasks/task";
 
 export function validateCreateTaskInput(input: CreateTaskInput) {
   const errors: string[] = [];
@@ -15,13 +16,21 @@ export function validateCreateTaskInput(input: CreateTaskInput) {
     errors.push("dueDate is required");
   }
 
-  if (input.weight < 1 || input.weight > 10) {
-    errors.push("weight must be between 1 and 10");
+  if (!TASK_WEIGHTS.includes(input.weight)) {
+    errors.push("weight must be low, medium or high");
+  }
+
+  if (!TASK_URGENCIES.includes(input.urgency)) {
+    errors.push("urgency must be low, medium or high");
+  }
+
+  if (!TASK_TYPES.includes(input.type)) {
+    errors.push("type must be exam, assignment, exercise, reading or other");
   }
 
   return errors;
 }
 
-function hasText(value: string) {
-  return value.trim().length > 0;
+function hasText(value: any) {
+  return typeof value === "string" && value.trim().length > 0;
 }

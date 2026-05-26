@@ -6,7 +6,7 @@ import { validateCreateTaskInput } from "./validation";
 export class TaskService {
   constructor(
     private readonly taskRepository: TaskRepository,
-    private readonly generateId: TaskIdGenerator = crypto.randomUUID,
+    private readonly generateId: TaskIdGenerator = () => crypto.randomUUID(),
     private readonly clock: TaskClock = () => new Date(),
   ) {}
 
@@ -21,7 +21,7 @@ export class TaskService {
     const task: Task = {
       ...input,
       id: this.generateId(),
-      priority: calculateTaskPriority(input.dueDate, input.weight, input.urgency),
+      priority: calculateTaskPriority(input.dueDate, input.weight, input.urgency, input.type),
       status: "pending",
       createdAt: now,
       updatedAt: now,

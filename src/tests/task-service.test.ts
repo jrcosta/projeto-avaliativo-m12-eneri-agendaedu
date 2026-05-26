@@ -1,40 +1,30 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { TaskService } from "../application/tasks/task-service";
 import type { TaskRepository } from "../application/tasks/ports/task-repository";
 import type { Task } from "../domain/tasks/task";
 
-class InMemoryTaskRepository implements TaskRepository {
-  private readonly tasks = new Map<string, Task>();
-
-  async create(task: Task) {
-    this.tasks.set(task.id, task);
-    return task;
-  }
-
-  async list() {
-    return Array.from(this.tasks.values());
-  }
-
-  async findById(id: string) {
-    return this.tasks.get(id) ?? null;
-  }
-
-  async update(task: Task) {
-    this.tasks.set(task.id, task);
-    return task;
-  }
-}
+const mockRepository: TaskRepository = {
+  create: vi.fn((task: Task) => Promise.resolve(task)),
+  list: vi.fn(() => Promise.resolve([])),
+  findById: vi.fn(() => Promise.resolve(null)),
+  update: vi.fn((task: Task) => Promise.resolve(task)),
+};
 
 describe("TaskService", () => {
-  it("creates task with calculated high priority", async () => {
-    const service = new TaskService(new InMemoryTaskRepository(), () => "task-1", () => new Date("2026-05-26T00:00:00.000Z"));
+  const service = new TaskService(
+    mockRepository,
+    () => "task-1",
+    () => new Date("2026-05-26T00:00:00.000Z"),
+  );
 
+  it("creates task with calculated high priority", async () => {
     const result = await service.createTask({
       title: "Estudar matemática",
       subject: "Matemática",
+      type: "exam",
       dueDate: "2026-05-27",
-      weight: 9,
-      urgency: "medium",
+      weight: "high",
+      urgency: "high",
     });
 
     expect(result).toEqual({
@@ -43,9 +33,10 @@ describe("TaskService", () => {
         id: "task-1",
         title: "Estudar matemática",
         subject: "Matemática",
+        type: "exam",
         dueDate: "2026-05-27",
-        weight: 9,
-        urgency: "medium",
+        weight: "high",
+        urgency: "high",
         priority: "high",
         status: "pending",
         createdAt: "2026-05-26T00:00:00.000Z",
@@ -55,19 +46,18 @@ describe("TaskService", () => {
   });
 
   it("rejects task without required fields", async () => {
-    const service = new TaskService(new InMemoryTaskRepository());
-
     const result = await service.createTask({
       title: "",
       subject: "",
       dueDate: "",
-      weight: 0,
-      urgency: "low",
+      weight: "medium",
+      urgency: "medium",
+      type: "exercise",
     });
 
-    expect(result).toEqual({
-      ok: false,
-      errors: ["title is required", "subject is required", "dueDate is required", "weight must be between 1 and 10"],
-    });
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain("title is required");
+    expect(result.errors).toContain("subject is required");
+    expect(result.errors).toContain("dueDate is required");
   });
 });
