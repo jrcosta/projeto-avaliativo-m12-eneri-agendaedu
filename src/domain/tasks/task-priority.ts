@@ -1,20 +1,48 @@
-import type { TaskPriority, TaskUrgency } from "./task";
+import type { TaskPriority, TaskUrgency, TaskWeight, TaskType } from "./task";
 
-const HIGH_WEIGHT_THRESHOLD = 8;
-const MEDIUM_WEIGHT_THRESHOLD = 5;
 const SOON_DUE_DAYS = 3;
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-export function calculateTaskPriority(dueDate: string, weight: number, urgency: TaskUrgency): TaskPriority {
-  if (urgency === "high" || weight >= HIGH_WEIGHT_THRESHOLD || isDueSoon(dueDate)) {
-    return "high";
-  }
+export function calculateTaskPriority(
+  dueDate: string, 
+  weight: TaskWeight, 
+  urgency: TaskUrgency,
+  type: TaskType
+): TaskPriority {
+  const isSoon = isDueSoon(dueDate);
+  
+  const weightScore = mapToScore(weight);
+  const urgencyScore = mapToScore(urgency);
+  const typeScore = mapTypeToScore(type);
+  const dueScore = isSoon ? 3 : 1;
 
-  if (urgency === "medium" || weight >= MEDIUM_WEIGHT_THRESHOLD) {
-    return "medium";
-  }
+  // Max score: 3 (weight) + 3 (urgency) + 3 (type) + 3 (due) = 12
+  // Min score: 1 + 1 + 1 + 1 = 4
+  const totalScore = weightScore + urgencyScore + typeScore + dueScore;
 
+  if (totalScore >= 10) return "high";
+  if (totalScore >= 7) return "medium";
   return "low";
+}
+
+function mapToScore(value: TaskWeight | TaskUrgency): number {
+  switch (value) {
+    case "high": return 3;
+    case "medium": return 2;
+    case "low": return 1;
+    default: return 1;
+  }
+}
+
+function mapTypeToScore(type: TaskType): number {
+  switch (type) {
+    case "exam": return 3;
+    case "assignment": return 2;
+    case "exercise":
+    case "reading":
+    case "other": return 1;
+    default: return 1;
+  }
 }
 
 function isDueSoon(dueDate: string) {

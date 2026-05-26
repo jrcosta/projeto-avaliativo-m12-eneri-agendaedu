@@ -69,3 +69,15 @@ crie uma branch nova e adicione o seguinte fluxo no agents.md como obrigatorio: 
 ```text
 atualize essa branch com a develop, depois refatore o código inicial aplicando clean code e deixando a estrutura pronta para ser construida com uma arquitetura hexagonal.
 ```
+
+### Prompt 12 — Criar PR do Ciclo 1 para a main
+
+```text
+crie um pr da develop para a main, descrevendo como ciclo 1 de desenvolvimento e detalhando as mudanças que subirão.
+```
+
+### Prompt 13 — Criar issue com User Story e vincular ao PR
+
+```text
+crie uma issue e vincule ao pr com o descritivo em user story
+```
