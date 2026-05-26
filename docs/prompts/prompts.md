@@ -63,3 +63,9 @@ crie uma user story para essa implementação, faça commit e push e crie um pr.
 ```text
 crie uma branch nova e adicione o seguinte fluxo no agents.md como obrigatorio: criar uma branch criar uma branch feature/nome-da-mudança ou fix/nome-da-correcao ou docs/chore etc > fazer a mudança > commitar com commit semantico > criar um pull request seguindo o padrão do repo.
 ```
+
+### Prompt 11 — Atualizar branch e refatorar para Clean Code/hexagonal
+
+```text
+atualize essa branch com a develop, depois refatore o código inicial aplicando clean code e deixando a estrutura pronta para ser construida com uma arquitetura hexagonal.
+```

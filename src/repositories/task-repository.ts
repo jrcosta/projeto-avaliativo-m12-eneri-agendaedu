@@ -1,5 +1,1 @@
-import type { Task } from "../domain/task";
-
-export type TaskRepository = {
-  list(): Promise<Task[]>;
-};
+export type { TaskRepository } from "../application/tasks/ports/task-repository";

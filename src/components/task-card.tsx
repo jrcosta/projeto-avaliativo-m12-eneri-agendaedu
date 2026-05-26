@@ -1,3 +1,1 @@
-export function TaskCard() {
-  return null;
-}
+export { TaskCard } from "../presentation/components/tasks/task-card";

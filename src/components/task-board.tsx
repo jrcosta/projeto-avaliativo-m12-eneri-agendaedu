@@ -1,3 +1,1 @@
-export function TaskBoard() {
-  return null;
-}
+export { TaskBoard } from "../presentation/components/tasks/task-board";
