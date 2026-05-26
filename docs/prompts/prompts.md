@@ -147,3 +147,9 @@ na branch atual deixe a cobertura de testes automatizados unitários completa pa
 ```text
 crie um pr da develop para a main chamando de ciclo 2
 ```
+
+### Prompt 25 — Criar Pipelines CI/CD
+
+```text
+crie uma pipeline que rode o build da aplicação e um outro que rode os testes automatizados.
+```
