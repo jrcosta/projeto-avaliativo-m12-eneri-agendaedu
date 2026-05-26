@@ -33,54 +33,89 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen p-8 max-w-4xl mx-auto space-y-8">
-      <header className="text-center space-y-2">
-        <h1 className="text-4xl font-bold tracking-tight text-blue-600">Agenda Edu</h1>
-        <p className="text-gray-600 italic">Seu organizador escolar inteligente</p>
-      </header>
+    <main className="min-h-screen bg-slate-50 text-slate-800 p-4 md:p-8 flex flex-col items-center">
+      <div className="w-full max-w-4xl space-y-8">
+        <header className="text-center space-y-3 pt-6 pb-2">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 drop-shadow-sm">
+            Agenda <span className="text-blue-600">Edu</span>
+          </h1>
+          <p className="text-slate-500 text-lg md:text-xl font-medium tracking-wide">
+            Seu organizador escolar inteligente
+          </p>
+        </header>
 
-      <div className="flex justify-center border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab("list")}
-          className={`px-6 py-3 font-semibold transition-colors border-b-2 ${
-            activeTab === "list"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          }`}
-        >
-          Minhas Tarefas
-        </button>
-        <button
-          onClick={() => setActiveTab("create")}
-          className={`px-6 py-3 font-semibold transition-colors border-b-2 ${
-            activeTab === "create"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          }`}
-        >
-          Cadastrar Tarefa
-        </button>
-      </div>
-
-      <div className="mt-8">
-        {activeTab === "create" ? (
-          <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Nova Tarefa</h2>
-            <TaskForm onSuccess={handleSuccess} />
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="flex border-b border-slate-100 bg-slate-50/50">
+            <button
+              onClick={() => setActiveTab("list")}
+              className={`flex-1 py-4 text-sm md:text-base font-semibold transition-all duration-200 ${
+                activeTab === "list"
+                  ? "text-blue-600 bg-white border-b-2 border-blue-600 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700 hover:bg-slate-100"
+              }`}
+            >
+              Minhas Tarefas
+            </button>
+            <button
+              onClick={() => setActiveTab("create")}
+              className={`flex-1 py-4 text-sm md:text-base font-semibold transition-all duration-200 ${
+                activeTab === "create"
+                  ? "text-blue-600 bg-white border-b-2 border-blue-600 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700 hover:bg-slate-100"
+              }`}
+            >
+              Cadastrar Tarefa
+            </button>
           </div>
-        ) : (
-          <div className="space-y-4">
-            {loading ? (
-              <p className="text-center text-gray-500">Carregando tarefas...</p>
-            ) : tasks.length > 0 ? (
-              <TaskBoard tasks={tasks} />
+
+          <div className="p-6 md:p-8">
+            {activeTab === "create" ? (
+              <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6">Nova Tarefa</h2>
+                <TaskForm onSuccess={handleSuccess} />
+              </div>
             ) : (
-              <div className="text-center py-12 border-2 border-dashed rounded-xl border-gray-200">
-                <p className="text-gray-400">Nenhuma tarefa cadastrada ainda.</p>
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-slate-800">Minhas Tarefas</h2>
+                  <span className="bg-blue-100 text-blue-700 py-1 px-3 rounded-full text-xs font-bold">
+                    {tasks.length} {tasks.length === 1 ? 'tarefa' : 'tarefas'}
+                  </span>
+                </div>
+                
+                {loading ? (
+                  <div className="flex justify-center py-12">
+                    <div className="animate-pulse flex space-x-2">
+                      <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                      <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                      <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                    </div>
+                  </div>
+                ) : tasks.length > 0 ? (
+                  <TaskBoard tasks={tasks} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-16 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    <div className="bg-white p-4 rounded-full shadow-sm mb-4">
+                      <svg className="w-8 h-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-slate-700 mb-1">Nenhuma tarefa por aqui</h3>
+                    <p className="text-slate-500 max-w-sm">
+                      Você ainda não cadastrou nenhuma tarefa. Clique na aba acima para organizar seus estudos!
+                    </p>
+                    <button 
+                      onClick={() => setActiveTab("create")}
+                      className="mt-6 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-all"
+                    >
+                      Criar primeira tarefa &rarr;
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
-        )}
+        </div>
       </div>
     </main>
   );
