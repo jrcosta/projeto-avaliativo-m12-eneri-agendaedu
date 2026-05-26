@@ -135,3 +135,9 @@ faça a modificação pedida no arquivo @docs\prompts\prompt-refatorar-ui.md
 ```text
 ainda no pr 19 coloque uma opção na pagina de tema escuro ou claro.
 ```
+
+### Prompt 23 — Cobertura completa de testes unitários
+
+```text
+na branch atual deixe a cobertura de testes automatizados unitários completa para cobrir o código atual.
+```
