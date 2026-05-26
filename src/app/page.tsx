@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { TaskBoard } from "../presentation/components/tasks/task-board";
 import { TaskForm } from "../presentation/components/tasks/task-form";
 import type { Task } from "../domain/tasks/task";
+import { CalendarX2 } from "lucide-react";
 
 export default function HomePage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -96,9 +97,7 @@ export default function HomePage() {
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
                     <div className="bg-white p-4 rounded-full shadow-sm mb-4">
-                      <svg className="w-8 h-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                      </svg>
+                      <CalendarX2 className="w-8 h-8 text-blue-500" />
                     </div>
                     <h3 className="text-lg font-semibold text-slate-700 mb-1">Nenhuma tarefa por aqui</h3>
                     <p className="text-slate-500 max-w-sm">

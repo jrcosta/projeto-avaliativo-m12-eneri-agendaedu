@@ -1,4 +1,5 @@
 import type { Task } from "../../../domain/tasks/task";
+import { Calendar, BookOpen, AlertCircle, Clock } from "lucide-react";
 
 type TaskCardProps = {
   task: Task;
@@ -26,26 +27,27 @@ export function TaskCard({ task }: TaskCardProps) {
           {task.title}
         </h3>
         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-          <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-md">
+          <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-md flex items-center gap-1.5">
+            <BookOpen className="w-3.5 h-3.5" />
             {task.subject}
           </span>
           <span className="text-slate-300">•</span>
           <span>{typeLabels[task.type]}</span>
           <span className="text-slate-300">•</span>
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+          <span className="flex items-center gap-1 text-slate-600">
+            <Calendar className="w-4 h-4" />
             {new Date(task.dueDate).toLocaleDateString("pt-BR")}
           </span>
         </div>
       </div>
       
       <div className="flex gap-3 items-center">
-        <span className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm ${priorityColors[task.priority]}`}>
+        <span className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1 ${priorityColors[task.priority]}`}>
+          {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5" />}
           {task.priority.toUpperCase()}
         </span>
-        <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wide">
+        <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wide flex items-center gap-1.5">
+          {task.status === 'pending' && <Clock className="w-3.5 h-3.5" />}
           {task.status.replace("_", " ")}
         </span>
       </div>
