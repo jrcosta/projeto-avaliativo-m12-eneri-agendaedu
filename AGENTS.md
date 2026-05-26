@@ -155,7 +155,9 @@ Documentar uso de IA nas etapas abaixo:
 
 ### Prompts
 
-Todos os prompts devem ficar em `docs/prompts/`, organizados e nomeados por etapa.
+Todos os prompts enviados pelo usuário durante o desenvolvimento devem ser registrados em `docs/prompts/prompts.md`, preservando texto original, data e objetivo quando possível.
+
+Prompts específicos de etapas técnicas também devem ficar em `docs/prompts/`, organizados e nomeados por etapa.
 
 Sugestão de estrutura:
 
