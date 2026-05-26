@@ -117,3 +117,9 @@ agora apareceu erro de conexão com o servidor ao salvar
 ```text
 salve meus prompts no arqui @docs/prompts/prompts.md, crie uma branch, faça commit semantico, crie uma issue um pr e vincule os dois, faça tudo seguindo as recomendações do @docs/requisitos-entrega.md e o @AGENTS.md
 ```
+
+### Prompt 20 — Implementar navegação em abas
+
+```text
+quero que ele seja em abas, ao abrir a primeira aba exibe as minhas tarefas e a aba ao lado é cadastrar a tarefa, como está agora mas dividido em abas.
+```
