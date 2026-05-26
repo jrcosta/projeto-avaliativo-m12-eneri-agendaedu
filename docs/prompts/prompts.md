@@ -45,3 +45,27 @@ crie uma pasta prompts dentro de docs e crie um arquivo prompts.md e dentro colo
 ```text
 crie um arquivo contendo a arquitetura basica do projeto, quero fullstack nextjs, com banco h2 em memoria, servless.
 ```
+
+### Prompt 8 — Atualizar branch com develop e criar estrutura inicial
+
+```text
+atualize e branch com a develop, e depois crie a estrutura inicial de pastas do projeto conforme descrito no documento de arquitetura.
+```
+
+### Prompt 9 — Criar user story, commit, push e PR da estrutura inicial
+
+```text
+crie uma user story para essa implementação, faça commit e push e crie um pr.
+```
+
+### Prompt 10 — Criar branch e obrigar fluxo de branch, commit e PR
+
+```text
+crie uma branch nova e adicione o seguinte fluxo no agents.md como obrigatorio: criar uma branch criar uma branch feature/nome-da-mudança ou fix/nome-da-correcao ou docs/chore etc > fazer a mudança > commitar com commit semantico > criar um pull request seguindo o padrão do repo.
+```
+
+### Prompt 11 — Atualizar branch e refatorar para Clean Code/hexagonal
+
+```text
+atualize essa branch com a develop, depois refatore o código inicial aplicando clean code e deixando a estrutura pronta para ser construida com uma arquitetura hexagonal.
+```
