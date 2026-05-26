@@ -1,3 +1,1 @@
-export function TaskForm() {
-  return null;
-}
+export { TaskForm } from "../presentation/components/tasks/task-form";

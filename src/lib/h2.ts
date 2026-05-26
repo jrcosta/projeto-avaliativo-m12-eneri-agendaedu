@@ -1,3 +1,1 @@
-export function createH2ConnectionString() {
-  return "jdbc:h2:mem:agenda_escolar";
-}
+export { createH2ConnectionString } from "../infrastructure/persistence/h2/h2-client";

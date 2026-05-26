@@ -206,19 +206,27 @@ src/
     api/
       tasks/
         route.ts
-  components/
-    task-board.tsx
-    task-card.tsx
-    task-form.tsx
   domain/
-    task.ts
-    task-service.ts
-  repositories/
-    task-repository.ts
-    h2-task-repository.ts
-  lib/
-    h2.ts
-    validation.ts
+    tasks/
+      task.ts
+      task-priority.ts
+  application/
+    tasks/
+      task-service.ts
+      validation.ts
+      ports/
+        task-repository.ts
+  infrastructure/
+    persistence/
+      h2/
+        h2-client.ts
+        h2-task-repository.ts
+  presentation/
+    components/
+      tasks/
+        task-board.tsx
+        task-card.tsx
+        task-form.tsx
   tests/
     task-service.test.ts
     tasks-api.test.ts
@@ -226,8 +234,11 @@ src/
 docs/
   prompts/
     prompts.md
+    06-refatoracao.md
   arquitetura-basica.md
 ```
+
+A estrutura segue arquitetura hexagonal: `domain` concentra modelos e regras puras, `application` concentra casos de uso e portas, `infrastructure` concentra adaptadores externos como persistência H2, `presentation` concentra componentes de interface e `app` atua como adaptador do Next.js.
 
 ## Decisões técnicas
 

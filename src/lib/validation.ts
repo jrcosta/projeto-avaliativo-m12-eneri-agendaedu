@@ -1,3 +1,1 @@
-export function validateRequired(value: string) {
-  return value.trim().length > 0;
-}
+export { validateCreateTaskInput } from "../application/tasks/validation";
