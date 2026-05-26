@@ -141,3 +141,9 @@ ainda no pr 19 coloque uma opção na pagina de tema escuro ou claro.
 ```text
 na branch atual deixe a cobertura de testes automatizados unitários completa para cobrir o código atual.
 ```
+
+### Prompt 24 — Release Ciclo 2 (PR para Main)
+
+```text
+crie um pr da develop para a main chamando de ciclo 2
+```
