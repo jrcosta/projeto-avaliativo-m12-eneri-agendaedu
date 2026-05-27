@@ -100,7 +100,50 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
   };
 
   return (
-    <article className={`p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-all border flex flex-col md:flex-row md:items-center justify-between gap-5 group ${task.status === 'done' ? 'opacity-60 border-slate-100 dark:border-slate-700' : 'border-slate-200 dark:border-slate-700'}`}>
+    <article className={`relative p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-all border flex flex-col md:flex-row md:items-center justify-between gap-5 group ${task.status === 'done' ? 'opacity-60 border-slate-100 dark:border-slate-700' : 'border-slate-200 dark:border-slate-700'}`}>
+
+      {/* Score tooltip — canto superior direito */}
+      <div className="absolute top-3 right-3" onMouseEnter={() => setShowScore(true)} onMouseLeave={() => setShowScore(false)}>
+        <button
+          type="button"
+          className="w-5 h-5 rounded-full flex items-center justify-center text-slate-300 hover:text-blue-500 dark:text-slate-600 dark:hover:text-blue-400 transition-colors"
+          aria-label="Ver cálculo de prioridade"
+        >
+          <Info className="w-4 h-4" />
+        </button>
+
+        {showScore && (
+          <div className="absolute z-50 top-full right-0 mt-1 w-56 bg-slate-900 dark:bg-slate-950 text-white text-xs rounded-xl shadow-xl p-3 pointer-events-none border border-slate-700">
+            <p className="font-bold text-slate-200 mb-2 text-center">Cálculo de Prioridade</p>
+            <div className="space-y-1 text-slate-300">
+              <div className="flex justify-between">
+                <span>Peso ({weightLabels[task.weight]})</span>
+                <span className="font-mono font-bold text-blue-400">+{score.w}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Urgência ({urgencyLabels[task.urgency]})</span>
+                <span className="font-mono font-bold text-blue-400">+{score.u}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Tipo ({typeScoreLabels[task.type]})</span>
+                <span className="font-mono font-bold text-blue-400">+{score.t}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Prazo {score.d === 3 ? "(≤ 3 dias)" : "(> 3 dias)"}</span>
+                <span className="font-mono font-bold text-blue-400">+{score.d}</span>
+              </div>
+            </div>
+            <div className="mt-2 pt-2 border-t border-slate-700 flex justify-between items-center">
+              <span className="font-bold text-slate-100">Total</span>
+              <span className="font-mono font-bold text-white">{score.total} / 12</span>
+            </div>
+            <p className="mt-1 text-center text-slate-400 font-mono text-[10px]">{score.threshold}</p>
+            {/* seta */}
+            <div className="absolute bottom-full right-2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-950" />
+          </div>
+        )}
+      </div>
+
       <div className="space-y-2">
         <h3 className={`font-bold text-lg transition-colors ${task.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
           {task.title}
@@ -126,48 +169,6 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
             {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5" />}
             {task.priority.toUpperCase()}
           </span>
-
-          {/* Score tooltip */}
-          <div className="relative" onMouseEnter={() => setShowScore(true)} onMouseLeave={() => setShowScore(false)}>
-            <button
-              type="button"
-              className="w-5 h-5 rounded-full flex items-center justify-center text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-              aria-label="Ver cálculo de prioridade"
-            >
-              <Info className="w-4 h-4" />
-            </button>
-
-            {showScore && (
-              <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-slate-900 dark:bg-slate-950 text-white text-xs rounded-xl shadow-xl p-3 pointer-events-none border border-slate-700">
-                <p className="font-bold text-slate-200 mb-2 text-center">Cálculo de Prioridade</p>
-                <div className="space-y-1 text-slate-300">
-                  <div className="flex justify-between">
-                    <span>Peso ({weightLabels[task.weight]})</span>
-                    <span className="font-mono font-bold text-blue-400">+{score.w}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Urgência ({urgencyLabels[task.urgency]})</span>
-                    <span className="font-mono font-bold text-blue-400">+{score.u}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Tipo ({typeScoreLabels[task.type]})</span>
-                    <span className="font-mono font-bold text-blue-400">+{score.t}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Prazo {score.d === 3 ? "(≤ 3 dias)" : "(> 3 dias)"}</span>
-                    <span className="font-mono font-bold text-blue-400">+{score.d}</span>
-                  </div>
-                </div>
-                <div className="mt-2 pt-2 border-t border-slate-700 flex justify-between items-center">
-                  <span className="font-bold text-slate-100">Total</span>
-                  <span className="font-mono font-bold text-white">{score.total} / 12</span>
-                </div>
-                <p className="mt-1 text-center text-slate-400 font-mono text-[10px]">{score.threshold}</p>
-                {/* seta */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-slate-950" />
-              </div>
-            )}
-          </div>
 
           <button
             onClick={() => {
