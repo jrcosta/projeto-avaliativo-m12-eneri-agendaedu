@@ -1,7 +1,7 @@
 import { TaskService } from "../../../../application/tasks/task-service";
-import { H2TaskRepository } from "../../../../infrastructure/persistence/h2/h2-task-repository";
+import { JsonTaskRepository } from "../../../../infrastructure/persistence/json/json-task-repository";
 
-const taskService = new TaskService(new H2TaskRepository());
+const taskService = new TaskService(new JsonTaskRepository());
 
 export async function PUT(
   request: Request,

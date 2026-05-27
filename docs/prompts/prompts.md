@@ -171,3 +171,9 @@ crie o mr da develop para a main como fechamento do ciclo
 ```text
 agora abra uma branch para melhorias, quero implementar essa Funcionalidade para editar e excluir tarefas.
 ```
+
+### Prompt 29 — Implementar Persistência Local (File Database)
+
+```text
+crie uma branch para a seguinte mudança, eu quero refatorar o sistema de banco, quero algo que pode facilmente ser rodado, mas que não se perca com o reload.
+```
