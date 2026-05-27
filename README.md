@@ -84,6 +84,16 @@ A Inteligência Artificial não foi utilizada apenas para "escrever código", ma
    - **Aplicação:** `http://localhost:3000`
    - **Documentação da API:** `http://localhost:3000/api-docs`
 
+## ☁️ Deploy na Vercel
+
+Para que o projeto funcione corretamente na Vercel, siga estes passos:
+
+1. Importe o repositório na Vercel.
+2. Nas configurações do projeto, adicione a **Environment Variable**:
+   - `MONGODB_URI`: Sua string de conexão do MongoDB Atlas.
+3. O Vercel detectará automaticamente as configurações do Next.js.
+4. Clique em **Deploy**.
+
 ## 🧪 Rodando os Testes (100% Coverage)
 
 A aplicação conta com 100% de cobertura nos arquivos lógicos e de integração de API.
