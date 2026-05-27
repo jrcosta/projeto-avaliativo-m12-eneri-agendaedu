@@ -225,3 +225,9 @@ evolua esse projeto em uma nova branch, faça melhorias e novas funcionalidades.
 ```text
 melhore a cobertura de testes nesse mesmo pr, e ao subir o pr crie uma issue junto
 ```
+
+### Prompt 38 — Correção de Falha no CI Build
+
+```text
+o ci do build no github falhou
+```
