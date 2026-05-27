@@ -1,7 +1,7 @@
 import { TaskService } from "../../../application/tasks/task-service";
-import { JsonTaskRepository } from "../../../infrastructure/persistence/json/json-task-repository";
+import { MongoTaskRepository } from "../../../infrastructure/persistence/mongodb/mongo-task-repository";
 
-const taskService = new TaskService(new JsonTaskRepository());
+const taskService = new TaskService(new MongoTaskRepository());
 
 export async function GET() {
   const tasks = await taskService.listTasks();
