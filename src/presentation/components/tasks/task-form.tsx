@@ -73,8 +73,9 @@ export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Título</label>
+          <label htmlFor="title" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Título</label>
           <input 
+            id="title"
             name="title" 
             defaultValue={initialTask?.title}
             required
@@ -83,8 +84,9 @@ export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Matéria</label>
+          <label htmlFor="subject" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Matéria</label>
           <input 
+            id="subject"
             name="subject" 
             defaultValue={initialTask?.subject}
             required
@@ -93,8 +95,9 @@ export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tipo de Atividade</label>
+          <label htmlFor="type" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tipo de Atividade</label>
           <select 
+            id="type"
             name="type" 
             defaultValue={initialTask?.type || "exercise"}
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 appearance-none"
@@ -107,8 +110,9 @@ export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Prazo</label>
+          <label htmlFor="dueDate" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Prazo</label>
           <input 
+            id="dueDate"
             name="dueDate" 
             defaultValue={initialTask?.dueDate}
             type="date" 
@@ -117,8 +121,9 @@ export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Peso Acadêmico</label>
+          <label htmlFor="weight" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Peso Acadêmico</label>
           <select 
+            id="weight"
             name="weight" 
             defaultValue={initialTask?.weight || "low"}
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 appearance-none"
@@ -129,8 +134,9 @@ export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Urgência</label>
+          <label htmlFor="urgency" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Urgência</label>
           <select 
+            id="urgency"
             name="urgency" 
             defaultValue={initialTask?.urgency || "low"}
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 appearance-none"

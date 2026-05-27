@@ -8,6 +8,7 @@ const mockRepository: TaskRepository = {
   list: vi.fn(() => Promise.resolve([])),
   findById: vi.fn(() => Promise.resolve(null)),
   update: vi.fn((task: Task) => Promise.resolve(task)),
+  delete: vi.fn(() => Promise.resolve(true)),
 };
 
 describe("TaskService", () => {
