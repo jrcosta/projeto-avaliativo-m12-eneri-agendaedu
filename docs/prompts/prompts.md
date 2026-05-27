@@ -159,3 +159,9 @@ crie uma pipeline que rode o build da aplicação e um outro que rode os testes 
 ```text
 atualiza a branch, prepare o readme e o contributing, mencione a pasta dos prompts no readme, e juntamente crie uma documentação automatica da api com swagger.
 ```
+
+### Prompt 27 — Criar MR Final (Release)
+
+```text
+crie o mr da develop para a main como fechamento do ciclo
+```
