@@ -1,6 +1,33 @@
-import type { Task, TaskStatus } from "../../../domain/tasks/task";
-import { Calendar, BookOpen, AlertCircle, Clock, Trash2, Edit2, Play, CheckCircle2 } from "lucide-react";
-import { useState } from "react";
+import type { Task, TaskStatus, TaskWeight, TaskUrgency, TaskType } from "../../../domain/tasks/task";
+import { Calendar, BookOpen, AlertCircle, Clock, Trash2, Edit2, Play, CheckCircle2, Info } from "lucide-react";
+import { useState, useRef } from "react";
+
+// ── Score breakdown (mirrors domain/tasks/task-priority.ts) ──────────────────
+const SOON_DUE_DAYS = 3;
+
+function scoreWeight(v: TaskWeight)   { return v === "high" ? 3 : v === "medium" ? 2 : 1; }
+function scoreUrgency(v: TaskUrgency) { return v === "high" ? 3 : v === "medium" ? 2 : 1; }
+function scoreType(v: TaskType)       { return v === "exam" ? 3 : v === "assignment" ? 2 : 1; }
+function scoreDue(dueDate: string) {
+  const days = (new Date(dueDate).getTime() - Date.now()) / (24 * 60 * 60 * 1000);
+  return !Number.isNaN(days) && days <= SOON_DUE_DAYS ? 3 : 1;
+}
+
+function buildScoreBreakdown(task: Task) {
+  const w = scoreWeight(task.weight);
+  const u = scoreUrgency(task.urgency);
+  const t = scoreType(task.type);
+  const d = scoreDue(task.dueDate);
+  const total = w + u + t + d;
+  const threshold = total >= 10 ? "≥ 10 → HIGH" : total >= 7 ? "≥ 7 → MEDIUM" : "< 7 → LOW";
+  return { w, u, t, d, total, threshold };
+}
+
+const weightLabels:  Record<TaskWeight,  string> = { high: "Alto", medium: "Médio", low: "Baixo" };
+const urgencyLabels: Record<TaskUrgency, string> = { high: "Alta",  medium: "Média", low: "Baixa" };
+const typeScoreLabels: Record<TaskType, string>  = {
+  exam: "Prova", assignment: "Trabalho", exercise: "Exercício", reading: "Leitura", other: "Outro",
+};
 
 type TaskCardProps = {
   task: Task;
@@ -12,6 +39,32 @@ type TaskCardProps = {
 export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showScore, setShowScore] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const score = buildScoreBreakdown(task);
+
+  const handleTooltipEnter = () => {
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      const TOOLTIP_W = 224; // w-56
+      const TOOLTIP_H = 172; // altura estimada do tooltip
+      const GAP = 6;
+
+      // horizontal: alinha à direita do botão sem sair da tela
+      const left = Math.max(8, Math.min(rect.right - TOOLTIP_W, window.innerWidth - TOOLTIP_W - 8));
+
+      // vertical: abre abaixo se couber, senão abre acima
+      const spaceBelow = window.innerHeight - rect.bottom - GAP;
+      const top = spaceBelow >= TOOLTIP_H
+        ? rect.bottom + GAP
+        : rect.top - TOOLTIP_H - GAP;
+
+      setTooltipPos({ top, left });
+    }
+    setShowScore(true);
+  };
 
   const priorityColors = {
     high: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800/50",
@@ -70,7 +123,52 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
   };
 
   return (
-    <article className={`p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-all border flex flex-col md:flex-row md:items-center justify-between gap-5 group ${task.status === 'done' ? 'opacity-60 border-slate-100 dark:border-slate-700' : 'border-slate-200 dark:border-slate-700'}`}>
+    <article className={`relative p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-all border flex flex-col md:flex-row md:items-center justify-between gap-5 group ${task.status === 'done' ? 'opacity-60 border-slate-100 dark:border-slate-700' : 'border-slate-200 dark:border-slate-700'}`}>
+
+      {/* Score tooltip — canto superior direito */}
+      <div className="absolute top-3 right-3" onMouseEnter={handleTooltipEnter} onMouseLeave={() => setShowScore(false)}>
+        <button
+          ref={btnRef}
+          type="button"
+          className="w-5 h-5 rounded-full flex items-center justify-center text-slate-300 hover:text-blue-500 dark:text-slate-600 dark:hover:text-blue-400 transition-colors"
+          aria-label="Ver cálculo de prioridade"
+        >
+          <Info className="w-4 h-4" />
+        </button>
+
+        {showScore && (
+          <div
+            style={{ position: "fixed", top: tooltipPos.top, left: tooltipPos.left }}
+            className="z-[9999] w-56 bg-slate-900 dark:bg-slate-950 text-white text-xs rounded-xl shadow-xl p-3 pointer-events-none border border-slate-700"
+          >
+            <p className="font-bold text-slate-200 mb-2 text-center">Cálculo de Prioridade</p>
+            <div className="space-y-1 text-slate-300">
+              <div className="flex justify-between">
+                <span>Peso ({weightLabels[task.weight]})</span>
+                <span className="font-mono font-bold text-blue-400">+{score.w}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Urgência ({urgencyLabels[task.urgency]})</span>
+                <span className="font-mono font-bold text-blue-400">+{score.u}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Tipo ({typeScoreLabels[task.type]})</span>
+                <span className="font-mono font-bold text-blue-400">+{score.t}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Prazo {score.d === 3 ? "(≤ 3 dias)" : "(> 3 dias)"}</span>
+                <span className="font-mono font-bold text-blue-400">+{score.d}</span>
+              </div>
+            </div>
+            <div className="mt-2 pt-2 border-t border-slate-700 flex justify-between items-center">
+              <span className="font-bold text-slate-100">Total</span>
+              <span className="font-mono font-bold text-white">{score.total} / 12</span>
+            </div>
+            <p className="mt-1 text-center text-slate-400 font-mono text-[10px]">{score.threshold}</p>
+          </div>
+        )}
+      </div>
+
       <div className="space-y-2">
         <h3 className={`font-bold text-lg transition-colors ${task.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
           {task.title}
@@ -90,13 +188,14 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
         </div>
       </div>
       
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+      <div className="shrink-0 flex items-center gap-3">
+        {/* badges com largura fixa individual para alinhamento perfeito */}
         <div className="flex gap-2 items-center">
-          <span className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1 transition-colors ${priorityColors[task.priority]}`}>
-            {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5" />}
+          <span className={`w-20 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center justify-center gap-1 transition-colors ${priorityColors[task.priority]}`}>
+            {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5 shrink-0" />}
             {task.priority.toUpperCase()}
           </span>
-          
+
           <button
             onClick={() => {
               if (task.status === 'pending') handleStatusUpdate('in_progress');
@@ -104,7 +203,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
               else handleStatusUpdate('pending');
             }}
             disabled={isUpdating}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1.5 transition-all ${
+            className={`w-36 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center justify-center gap-1.5 transition-all ${
               task.status === 'done' 
                 ? 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/50'
                 : task.status === 'in_progress'
@@ -112,14 +211,14 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
                 : 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-600'
             }`}
           >
-            {task.status === 'pending' && <Play className="w-3 h-3 fill-current" />}
-            {task.status === 'in_progress' && <Clock className="w-3 h-3 animate-pulse" />}
-            {task.status === 'done' && <CheckCircle2 className="w-3 h-3" />}
+            {task.status === 'pending' && <Play className="w-3 h-3 fill-current shrink-0" />}
+            {task.status === 'in_progress' && <Clock className="w-3 h-3 animate-pulse shrink-0" />}
+            {task.status === 'done' && <CheckCircle2 className="w-3 h-3 shrink-0" />}
             {statusLabels[task.status].toUpperCase()}
           </button>
         </div>
         
-        <div className="flex gap-2 mt-2 sm:mt-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
             onClick={() => onEdit?.(task)}
             className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition-colors"
