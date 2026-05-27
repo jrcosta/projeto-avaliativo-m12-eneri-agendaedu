@@ -1,9 +1,32 @@
-import { describe, expect, it, vi, afterEach } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { GET, POST } from "../app/api/tasks/route";
 
+// Mock do Repositório para não tentar conectar ao MongoDB real durante os testes
+vi.mock("../infrastructure/persistence/mongodb/mongo-task-repository", () => {
+  return {
+    MongoTaskRepository: vi.fn().mockImplementation(() => {
+      const tasks = new Map();
+      return {
+        create: vi.fn(async (task) => {
+          tasks.set(task.id, task);
+          return task;
+        }),
+        list: vi.fn(async () => Array.from(tasks.values())),
+        findById: vi.fn(async (id) => tasks.get(id) || null),
+        update: vi.fn(async (task) => {
+          tasks.set(task.id, task);
+          return task;
+        }),
+        delete: vi.fn(async (id) => tasks.delete(id)),
+      };
+    }),
+  };
+});
+
 describe("tasks api", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    process.env.MONGODB_URI = "mongodb://dummy";
   });
 
   it("returns structured task list on GET", async () => {
