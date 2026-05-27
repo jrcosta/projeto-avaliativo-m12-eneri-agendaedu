@@ -207,3 +207,9 @@ não consigo importar o projeto no vercel, você pode ajustar algo para ele fica
 ```text
 crie um pr da develop para main
 ```
+
+### Prompt 35 — Atualizar Documentação Final (MongoDB)
+
+```text
+atualize o readme e as docs com a mudança
+```
