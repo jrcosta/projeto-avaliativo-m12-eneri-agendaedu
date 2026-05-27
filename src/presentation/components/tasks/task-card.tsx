@@ -1,6 +1,33 @@
-import type { Task, TaskStatus } from "../../../domain/tasks/task";
-import { Calendar, BookOpen, AlertCircle, Clock, Trash2, Edit2, Play, CheckCircle2 } from "lucide-react";
+import type { Task, TaskStatus, TaskWeight, TaskUrgency, TaskType } from "../../../domain/tasks/task";
+import { Calendar, BookOpen, AlertCircle, Clock, Trash2, Edit2, Play, CheckCircle2, Info } from "lucide-react";
 import { useState } from "react";
+
+// ── Score breakdown (mirrors domain/tasks/task-priority.ts) ──────────────────
+const SOON_DUE_DAYS = 3;
+
+function scoreWeight(v: TaskWeight)   { return v === "high" ? 3 : v === "medium" ? 2 : 1; }
+function scoreUrgency(v: TaskUrgency) { return v === "high" ? 3 : v === "medium" ? 2 : 1; }
+function scoreType(v: TaskType)       { return v === "exam" ? 3 : v === "assignment" ? 2 : 1; }
+function scoreDue(dueDate: string) {
+  const days = (new Date(dueDate).getTime() - Date.now()) / (24 * 60 * 60 * 1000);
+  return !Number.isNaN(days) && days <= SOON_DUE_DAYS ? 3 : 1;
+}
+
+function buildScoreBreakdown(task: Task) {
+  const w = scoreWeight(task.weight);
+  const u = scoreUrgency(task.urgency);
+  const t = scoreType(task.type);
+  const d = scoreDue(task.dueDate);
+  const total = w + u + t + d;
+  const threshold = total >= 10 ? "≥ 10 → HIGH" : total >= 7 ? "≥ 7 → MEDIUM" : "< 7 → LOW";
+  return { w, u, t, d, total, threshold };
+}
+
+const weightLabels:  Record<TaskWeight,  string> = { high: "Alto", medium: "Médio", low: "Baixo" };
+const urgencyLabels: Record<TaskUrgency, string> = { high: "Alta",  medium: "Média", low: "Baixa" };
+const typeScoreLabels: Record<TaskType, string>  = {
+  exam: "Prova", assignment: "Trabalho", exercise: "Exercício", reading: "Leitura", other: "Outro",
+};
 
 type TaskCardProps = {
   task: Task;
@@ -12,6 +39,9 @@ type TaskCardProps = {
 export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showScore, setShowScore] = useState(false);
+
+  const score = buildScoreBreakdown(task);
 
   const priorityColors = {
     high: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800/50",
@@ -96,7 +126,49 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
             {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5" />}
             {task.priority.toUpperCase()}
           </span>
-          
+
+          {/* Score tooltip */}
+          <div className="relative" onMouseEnter={() => setShowScore(true)} onMouseLeave={() => setShowScore(false)}>
+            <button
+              type="button"
+              className="w-5 h-5 rounded-full flex items-center justify-center text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              aria-label="Ver cálculo de prioridade"
+            >
+              <Info className="w-4 h-4" />
+            </button>
+
+            {showScore && (
+              <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-slate-900 dark:bg-slate-950 text-white text-xs rounded-xl shadow-xl p-3 pointer-events-none border border-slate-700">
+                <p className="font-bold text-slate-200 mb-2 text-center">Cálculo de Prioridade</p>
+                <div className="space-y-1 text-slate-300">
+                  <div className="flex justify-between">
+                    <span>Peso ({weightLabels[task.weight]})</span>
+                    <span className="font-mono font-bold text-blue-400">+{score.w}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Urgência ({urgencyLabels[task.urgency]})</span>
+                    <span className="font-mono font-bold text-blue-400">+{score.u}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Tipo ({typeScoreLabels[task.type]})</span>
+                    <span className="font-mono font-bold text-blue-400">+{score.t}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Prazo {score.d === 3 ? "(≤ 3 dias)" : "(> 3 dias)"}</span>
+                    <span className="font-mono font-bold text-blue-400">+{score.d}</span>
+                  </div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-slate-700 flex justify-between items-center">
+                  <span className="font-bold text-slate-100">Total</span>
+                  <span className="font-mono font-bold text-white">{score.total} / 12</span>
+                </div>
+                <p className="mt-1 text-center text-slate-400 font-mono text-[10px]">{score.threshold}</p>
+                {/* seta */}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-slate-950" />
+              </div>
+            )}
+          </div>
+
           <button
             onClick={() => {
               if (task.status === 'pending') handleStatusUpdate('in_progress');
