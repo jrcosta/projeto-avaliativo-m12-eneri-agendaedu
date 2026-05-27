@@ -165,3 +165,9 @@ atualiza a branch, prepare o readme e o contributing, mencione a pasta dos promp
 ```text
 crie o mr da develop para a main como fechamento do ciclo
 ```
+
+### Prompt 28 — Funcionalidade Editar/Excluir
+
+```text
+agora abra uma branch para melhorias, quero implementar essa Funcionalidade para editar e excluir tarefas.
+```

@@ -38,4 +38,8 @@ export class H2TaskRepository implements TaskRepository {
     tasks.set(task.id, task);
     return task;
   }
+
+  async delete(id: string) {
+    return tasks.delete(id);
+  }
 }
