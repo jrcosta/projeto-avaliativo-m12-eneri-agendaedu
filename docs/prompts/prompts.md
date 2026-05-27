@@ -183,3 +183,9 @@ crie uma branch para a seguinte mudança, eu quero refatorar o sistema de banco,
 ```text
 agora em outra branch atualize a o readme com a mudança.
 ```
+
+### Prompt 31 — Criar PR Ciclo 3 (Release)
+
+```text
+agora crie um pr para a main como ciclo 3
+```
