@@ -49,4 +49,29 @@ export class TaskService {
 
     return { ok: true as const, task: await this.taskRepository.update(updatedTask) };
   }
+
+  async updateTask(id: string, input: CreateTaskInput) {
+    const errors = validateCreateTaskInput(input);
+    if (errors.length > 0) return { ok: false as const, errors };
+
+    const task = await this.taskRepository.findById(id);
+    if (!task) return { ok: false as const, errors: ["task not found"] };
+
+    const updatedTask: Task = {
+      ...task,
+      ...input,
+      priority: calculateTaskPriority(input.dueDate, input.weight, input.urgency, input.type),
+      updatedAt: this.clock().toISOString(),
+    };
+
+    return { ok: true as const, task: await this.taskRepository.update(updatedTask) };
+  }
+
+  async deleteTask(id: string) {
+    const task = await this.taskRepository.findById(id);
+    if (!task) return { ok: false as const, errors: ["task not found"] };
+
+    await this.taskRepository.delete(id);
+    return { ok: true as const };
+  }
 }

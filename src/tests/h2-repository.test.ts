@@ -51,4 +51,12 @@ describe("H2TaskRepository", () => {
     const retrieved = await repository.findById("test-id-1");
     expect(retrieved?.status).toBe("done");
   });
+
+  it("deletes an existing task", async () => {
+    await repository.create(mockTask);
+    expect(await repository.findById("test-id-1")).not.toBeNull();
+
+    await repository.delete("test-id-1");
+    expect(await repository.findById("test-id-1")).toBeNull();
+  });
 });

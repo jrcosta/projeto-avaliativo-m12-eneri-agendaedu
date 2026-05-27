@@ -99,4 +99,63 @@ describe("TaskService", () => {
     expect(result.ok).toBe(false);
     expect(result.errors).toContain("task not found");
   });
+
+  it("updates task fully", async () => {
+    const existingTask: Task = {
+      id: "task-1",
+      title: "Old Title",
+      subject: "Old Sub",
+      type: "reading",
+      dueDate: "2026-05-26",
+      weight: "low",
+      urgency: "low",
+      priority: "low",
+      status: "pending",
+      createdAt: "2026-05-26T00:00:00.000Z",
+      updatedAt: "2026-05-26T00:00:00.000Z",
+    };
+
+    mockRepository.findById = vi.fn().mockResolvedValue(existingTask);
+    mockRepository.update = vi.fn((task) => Promise.resolve(task));
+
+    const result = await service.updateTask("task-1", {
+      title: "New Title",
+      subject: "New Sub",
+      type: "exam",
+      dueDate: "2026-05-27",
+      weight: "high",
+      urgency: "high"
+    });
+
+    expect(result.ok).toBe(true);
+    // @ts-ignore
+    expect(result.task.title).toBe("New Title");
+    // @ts-ignore
+    expect(result.task.priority).toBe("high");
+    expect(mockRepository.update).toHaveBeenCalled();
+  });
+
+  it("deletes a task", async () => {
+    const existingTask: Task = {
+      id: "task-1",
+      title: "Old Title",
+      subject: "Old Sub",
+      type: "reading",
+      dueDate: "2026-05-26",
+      weight: "low",
+      urgency: "low",
+      priority: "low",
+      status: "pending",
+      createdAt: "2026-05-26T00:00:00.000Z",
+      updatedAt: "2026-05-26T00:00:00.000Z",
+    };
+
+    mockRepository.findById = vi.fn().mockResolvedValue(existingTask);
+    mockRepository.delete = vi.fn().mockResolvedValue(true);
+
+    const result = await service.deleteTask("task-1");
+
+    expect(result.ok).toBe(true);
+    expect(mockRepository.delete).toHaveBeenCalledWith("task-1");
+  });
 });

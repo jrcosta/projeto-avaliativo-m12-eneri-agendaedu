@@ -11,6 +11,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"list" | "create">("list");
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [taskToEdit, setTaskToEdit] = useState<Task | undefined>(undefined);
 
   useEffect(() => {
     // Check system preference on load
@@ -49,7 +50,25 @@ export default function HomePage() {
 
   const handleSuccess = () => {
     fetchTasks();
+    setTaskToEdit(undefined);
     setActiveTab("list");
+  };
+
+  const handleEdit = (task: Task) => {
+    setTaskToEdit(task);
+    setActiveTab("create");
+  };
+
+  const handleCancelEdit = () => {
+    setTaskToEdit(undefined);
+    setActiveTab("list");
+  };
+
+  const handleTabClick = (tab: "list" | "create") => {
+    if (tab === "create" && activeTab !== "create") {
+      setTaskToEdit(undefined); // Limpa o form ao clicar na aba
+    }
+    setActiveTab(tab);
   };
 
   return (
@@ -75,7 +94,7 @@ export default function HomePage() {
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
           <div className="flex border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
             <button
-              onClick={() => setActiveTab("list")}
+              onClick={() => handleTabClick("list")}
               className={`flex-1 py-4 text-sm md:text-base font-semibold transition-all duration-200 ${
                 activeTab === "list"
                   ? "text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-800 border-b-2 border-blue-600 dark:border-blue-400 shadow-sm"
@@ -85,22 +104,28 @@ export default function HomePage() {
               Minhas Tarefas
             </button>
             <button
-              onClick={() => setActiveTab("create")}
+              onClick={() => handleTabClick("create")}
               className={`flex-1 py-4 text-sm md:text-base font-semibold transition-all duration-200 ${
                 activeTab === "create"
                   ? "text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-800 border-b-2 border-blue-600 dark:border-blue-400 shadow-sm"
                   : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50"
               }`}
             >
-              Cadastrar Tarefa
+              {taskToEdit ? "Editar Tarefa" : "Cadastrar Tarefa"}
             </button>
           </div>
 
           <div className="p-6 md:p-8">
             {activeTab === "create" ? (
               <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6 transition-colors">Nova Tarefa</h2>
-                <TaskForm onSuccess={handleSuccess} />
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6 transition-colors">
+                  {taskToEdit ? "Editar Tarefa" : "Nova Tarefa"}
+                </h2>
+                <TaskForm 
+                  initialTask={taskToEdit} 
+                  onSuccess={handleSuccess} 
+                  onCancel={handleCancelEdit} 
+                />
               </div>
             ) : (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -120,7 +145,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 ) : tasks.length > 0 ? (
-                  <TaskBoard tasks={tasks} />
+                  <TaskBoard tasks={tasks} onEdit={handleEdit} onDelete={fetchTasks} />
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 transition-colors">
                     <div className="bg-white dark:bg-slate-700 p-4 rounded-full shadow-sm mb-4 transition-colors">
