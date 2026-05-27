@@ -1,8 +1,35 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { PUT, DELETE } from "../app/api/tasks/[id]/route";
 import { POST } from "../app/api/tasks/route";
 
+// Mock do Repositório para não tentar conectar ao MongoDB real durante os testes
+vi.mock("../infrastructure/persistence/mongodb/mongo-task-repository", () => {
+  const tasks = new Map();
+  return {
+    MongoTaskRepository: vi.fn().mockImplementation(() => {
+      return {
+        create: vi.fn(async (task) => {
+          tasks.set(task.id, task);
+          return task;
+        }),
+        list: vi.fn(async () => Array.from(tasks.values())),
+        findById: vi.fn(async (id) => tasks.get(id) || null),
+        update: vi.fn(async (task) => {
+          tasks.set(task.id, task);
+          return task;
+        }),
+        delete: vi.fn(async (id) => tasks.delete(id)),
+      };
+    }),
+  };
+});
+
 describe("tasks/[id] api", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    process.env.MONGODB_URI = "mongodb://dummy";
+  });
+
   it("updates a task and returns 200 on valid PUT", async () => {
     // First create a task
     const postReq = new Request("http://localhost/api/tasks", {

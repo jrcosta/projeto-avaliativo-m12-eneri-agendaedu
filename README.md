@@ -30,10 +30,10 @@ O projeto segue a **Clean Architecture (Arquitetura Hexagonal)** simplificada pa
 
 - **Domínio (`src/domain`):** Regras de negócio puras (cálculo de prioridades e *scores*).
 - **Aplicação (`src/application`):** Casos de uso (`TaskService`) e validações isoladas da web.
-- **Infraestrutura (`src/infrastructure`):** Implementação de persistência. Utilizamos um **Repositório JSON Local** (salvo em `data/tasks.json`) para garantir que os dados não sejam perdidos entre reinicializações do servidor.
+- **Infraestrutura (`src/infrastructure`):** Implementação de persistência. Utilizamos o **MongoDB Atlas** (Cloud Database) através do ODM **Mongoose**, garantindo que os dados sejam globais e persistentes em deploys serverless (Vercel).
 - **Apresentação (`src/presentation` e `src/app`):** Componentes React puros e rotas Next.js serverless.
 
-> **Configuração de Persistência:** A aplicação detecta automaticamente a ausência do arquivo de dados e cria a pasta `data/` com uma tarefa de exemplo inicial para facilitar a primeira navegação.
+> **Escalabilidade:** A aplicação está pronta para o mundo real, utilizando padrões de conexão *singleton* para otimizar o uso do banco de dados em nuvem.
 
 ## 🤖 Uso de Inteligência Artificial Generativa
 
