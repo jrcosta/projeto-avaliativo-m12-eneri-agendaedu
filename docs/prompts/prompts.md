@@ -147,3 +147,21 @@ na branch atual deixe a cobertura de testes automatizados unitários completa pa
 ```text
 crie um pr da develop para a main chamando de ciclo 2
 ```
+
+### Prompt 25 — Criar Pipelines CI/CD
+
+```text
+crie uma pipeline que rode o build da aplicação e um outro que rode os testes automatizados.
+```
+
+### Prompt 26 — Preparar Entrega Final (README, Swagger e Contributing)
+
+```text
+atualiza a branch, prepare o readme e o contributing, mencione a pasta dos prompts no readme, e juntamente crie uma documentação automatica da api com swagger.
+```
+
+### Prompt 27 — Criar MR Final (Release)
+
+```text
+crie o mr da develop para a main como fechamento do ciclo
+```
