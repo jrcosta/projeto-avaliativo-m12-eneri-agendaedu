@@ -163,8 +163,9 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
         </div>
       </div>
       
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
-        <div className="flex gap-2 items-center">
+      <div className="shrink-0 flex items-center gap-3 justify-end">
+        {/* badges sempre alinhadas à direita com largura mínima fixa */}
+        <div className="flex gap-2 items-center w-[260px] justify-end">
           <span className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1 transition-colors ${priorityColors[task.priority]}`}>
             {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5" />}
             {task.priority.toUpperCase()}
@@ -192,7 +193,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
           </button>
         </div>
         
-        <div className="flex gap-2 mt-2 sm:mt-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
             onClick={() => onEdit?.(task)}
             className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition-colors"
