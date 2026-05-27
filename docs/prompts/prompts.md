@@ -189,3 +189,9 @@ agora em outra branch atualize a o readme com a mudança.
 ```text
 agora crie um pr para a main como ciclo 3
 ```
+
+### Prompt 32 — Integrar com MongoDB Atlas
+
+```text
+mongo como faço?
+```
