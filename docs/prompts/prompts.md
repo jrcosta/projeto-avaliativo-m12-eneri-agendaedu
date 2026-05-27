@@ -177,3 +177,9 @@ agora abra uma branch para melhorias, quero implementar essa Funcionalidade para
 ```text
 crie uma branch para a seguinte mudança, eu quero refatorar o sistema de banco, quero algo que pode facilmente ser rodado, mas que não se perca com o reload.
 ```
+
+### Prompt 30 — Atualizar README com nova persistência
+
+```text
+agora em outra branch atualize a o readme com a mudança.
+```
