@@ -163,11 +163,11 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
         </div>
       </div>
       
-      <div className="shrink-0 flex items-center gap-3 justify-end">
-        {/* badges sempre alinhadas à direita com largura mínima fixa */}
-        <div className="flex gap-2 items-center w-[260px] justify-end">
-          <span className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1 transition-colors ${priorityColors[task.priority]}`}>
-            {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5" />}
+      <div className="shrink-0 flex items-center gap-3">
+        {/* badges com largura fixa individual para alinhamento perfeito */}
+        <div className="flex gap-2 items-center">
+          <span className={`w-20 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center justify-center gap-1 transition-colors ${priorityColors[task.priority]}`}>
+            {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5 shrink-0" />}
             {task.priority.toUpperCase()}
           </span>
 
@@ -178,7 +178,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
               else handleStatusUpdate('pending');
             }}
             disabled={isUpdating}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1.5 transition-all ${
+            className={`w-36 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center justify-center gap-1.5 transition-all ${
               task.status === 'done' 
                 ? 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/50'
                 : task.status === 'in_progress'
@@ -186,9 +186,9 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
                 : 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-600'
             }`}
           >
-            {task.status === 'pending' && <Play className="w-3 h-3 fill-current" />}
-            {task.status === 'in_progress' && <Clock className="w-3 h-3 animate-pulse" />}
-            {task.status === 'done' && <CheckCircle2 className="w-3 h-3" />}
+            {task.status === 'pending' && <Play className="w-3 h-3 fill-current shrink-0" />}
+            {task.status === 'in_progress' && <Clock className="w-3 h-3 animate-pulse shrink-0" />}
+            {task.status === 'done' && <CheckCircle2 className="w-3 h-3 shrink-0" />}
             {statusLabels[task.status].toUpperCase()}
           </button>
         </div>
