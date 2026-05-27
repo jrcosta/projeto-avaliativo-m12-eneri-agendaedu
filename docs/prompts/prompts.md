@@ -165,3 +165,27 @@ atualiza a branch, prepare o readme e o contributing, mencione a pasta dos promp
 ```text
 crie o mr da develop para a main como fechamento do ciclo
 ```
+
+### Prompt 28 — Funcionalidade Editar/Excluir
+
+```text
+agora abra uma branch para melhorias, quero implementar essa Funcionalidade para editar e excluir tarefas.
+```
+
+### Prompt 29 — Implementar Persistência Local (File Database)
+
+```text
+crie uma branch para a seguinte mudança, eu quero refatorar o sistema de banco, quero algo que pode facilmente ser rodado, mas que não se perca com o reload.
+```
+
+### Prompt 30 — Atualizar README com nova persistência
+
+```text
+agora em outra branch atualize a o readme com a mudança.
+```
+
+### Prompt 31 — Criar PR Ciclo 3 (Release)
+
+```text
+agora crie um pr para a main como ciclo 3
+```

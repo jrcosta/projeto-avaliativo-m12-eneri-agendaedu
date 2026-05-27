@@ -1,16 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import type { TaskType, TaskUrgency, TaskWeight } from "../../../domain/tasks/task";
+import type { Task, TaskType, TaskUrgency, TaskWeight } from "../../../domain/tasks/task";
 import { AlertCircle, Loader2, Save } from "lucide-react";
 
 type TaskFormProps = {
+  initialTask?: Task;
   onSuccess?: () => void;
+  onCancel?: () => void;
 };
 
-export function TaskForm({ onSuccess }: TaskFormProps) {
+export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isEditing = !!initialTask;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,15 +33,17 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
     };
 
     try {
-      const response = await fetch("/api/tasks", {
-        method: "POST",
+      const url = isEditing ? `/api/tasks/${initialTask.id}` : "/api/tasks";
+      const method = isEditing ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       if (response.ok) {
-        form.reset();
-        // Pequeno delay para garantir que o H2 (memória) processou
+        if (!isEditing) form.reset();
         setTimeout(() => {
           onSuccess?.();
         }, 100);
@@ -62,7 +68,7 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
         </div>
       )}
       <form 
-        aria-label="Nova tarefa escolar" 
+        aria-label={isEditing ? "Editar tarefa escolar" : "Nova tarefa escolar"} 
         className="grid grid-cols-1 md:grid-cols-2 gap-5"
         onSubmit={handleSubmit}
       >
@@ -70,6 +76,7 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
           <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Título</label>
           <input 
             name="title" 
+            defaultValue={initialTask?.title}
             required
             placeholder="Ex: Prova de História" 
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
@@ -79,6 +86,7 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
           <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Matéria</label>
           <input 
             name="subject" 
+            defaultValue={initialTask?.subject}
             required
             placeholder="Ex: História" 
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
@@ -88,6 +96,7 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
           <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tipo de Atividade</label>
           <select 
             name="type" 
+            defaultValue={initialTask?.type || "exercise"}
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 appearance-none"
           >
             <option value="exercise">Exercício</option>
@@ -101,6 +110,7 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
           <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Prazo</label>
           <input 
             name="dueDate" 
+            defaultValue={initialTask?.dueDate}
             type="date" 
             required
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100"
@@ -110,6 +120,7 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
           <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Peso Acadêmico</label>
           <select 
             name="weight" 
+            defaultValue={initialTask?.weight || "low"}
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 appearance-none"
           >
             <option value="low">Baixo (Atividade simples)</option>
@@ -121,6 +132,7 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
           <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Urgência</label>
           <select 
             name="urgency" 
+            defaultValue={initialTask?.urgency || "low"}
             className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 appearance-none"
           >
             <option value="low">Baixa (Pode esperar)</option>
@@ -128,21 +140,30 @@ export function TaskForm({ onSuccess }: TaskFormProps) {
             <option value="high">Alta (Imediata)</option>
           </select>
         </div>
-        <div className="md:col-span-2 pt-4 mt-2 border-t border-slate-100 dark:border-slate-700">
+        <div className="md:col-span-2 pt-4 mt-2 border-t border-slate-100 dark:border-slate-700 flex gap-3">
+          {isEditing && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold py-3.5 px-4 rounded-xl transition-all shadow-sm hover:shadow text-lg"
+            >
+              Cancelar
+            </button>
+          )}
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 active:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-800/50 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-sm hover:shadow text-lg flex justify-center items-center gap-2"
+            className={`${isEditing ? "flex-[2]" : "w-full"} bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 active:bg-blue-800 disabled:bg-blue-300 dark:disabled:bg-blue-800/50 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-sm hover:shadow text-lg flex justify-center items-center gap-2`}
           >
             {loading ? (
               <>
                 <Loader2 className="w-5 h-5 mr-2 animate-spin text-white" />
-                Salvando tarefa...
+                Salvando...
               </>
             ) : (
               <>
                 <Save className="w-5 h-5 mr-2 text-white" />
-                Salvar Tarefa
+                {isEditing ? "Atualizar Tarefa" : "Salvar Tarefa"}
               </>
             )}
           </button>
