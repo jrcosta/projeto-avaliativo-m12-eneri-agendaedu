@@ -177,6 +177,7 @@ export default function HomePage() {
                   {taskToEdit ? "Editar Tarefa" : "Nova Tarefa"}
                 </h2>
                 <TaskForm 
+                  key={taskToEdit?.id || 'new'}
                   initialTask={taskToEdit} 
                   onSuccess={handleSuccess} 
                   onCancel={handleCancelEdit} 
