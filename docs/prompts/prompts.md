@@ -231,3 +231,9 @@ melhore a cobertura de testes nesse mesmo pr, e ao subir o pr crie uma issue jun
 ```text
 o ci do build no github falhou
 ```
+
+### Prompt 39 — Release Ciclo 5 (PR para Main)
+
+```text
+agora crie o mr da develop para a main detalhando esse novo ciclo.
+```
