@@ -153,3 +153,9 @@ crie um pr da develop para a main chamando de ciclo 2
 ```text
 crie uma pipeline que rode o build da aplicação e um outro que rode os testes automatizados.
 ```
+
+### Prompt 26 — Preparar Entrega Final (README, Swagger e Contributing)
+
+```text
+atualiza a branch, prepare o readme e o contributing, mencione a pasta dos prompts no readme, e juntamente crie uma documentação automatica da api com swagger.
+```
