@@ -1,0 +1,115 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Agenda Edu API",
+    "version": "1.0.0",
+    "description": "Documentação da API Serverless da aplicação Agenda Edu."
+  },
+  "paths": {
+    "/api/tasks": {
+      "get": {
+        "summary": "Lista todas as tarefas escolares",
+        "responses": {
+          "200": {
+            "description": "Lista de tarefas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tasks": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Task"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cria uma nova tarefa escolar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tarefa criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "task": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação (Campos obrigatórios ou regras de domínio violadas)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateTaskInput": {
+        "type": "object",
+        "required": ["title", "subject", "type", "dueDate", "weight", "urgency"],
+        "properties": {
+          "title": { "type": "string", "example": "Prova de História" },
+          "subject": { "type": "string", "example": "História" },
+          "type": { "type": "string", "enum": ["exam", "assignment", "exercise", "reading", "other"], "example": "exam" },
+          "dueDate": { "type": "string", "format": "date", "example": "2026-05-27" },
+          "weight": { "type": "string", "enum": ["low", "medium", "high"], "example": "high" },
+          "urgency": { "type": "string", "enum": ["low", "medium", "high"], "example": "medium" }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "subject": { "type": "string" },
+          "type": { "type": "string", "enum": ["exam", "assignment", "exercise", "reading", "other"] },
+          "dueDate": { "type": "string", "format": "date" },
+          "weight": { "type": "string", "enum": ["low", "medium", "high"] },
+          "urgency": { "type": "string", "enum": ["low", "medium", "high"] },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+          "status": { "type": "string", "enum": ["pending", "in_progress", "done"] },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
