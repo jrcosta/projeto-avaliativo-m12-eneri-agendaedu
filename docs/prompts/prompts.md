@@ -213,3 +213,9 @@ crie um pr da develop para main
 ```text
 atualize o readme e as docs com a mudança
 ```
+
+### Prompt 36 — Evolução do Projeto (Melhorias e Novas Funcionalidades)
+
+```text
+evolua esse projeto em uma nova branch, faça melhorias e novas funcionalidades.
+```

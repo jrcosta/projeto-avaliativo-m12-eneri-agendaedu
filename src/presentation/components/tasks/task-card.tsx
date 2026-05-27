@@ -1,20 +1,28 @@
-import type { Task } from "../../../domain/tasks/task";
-import { Calendar, BookOpen, AlertCircle, Clock, Trash2, Edit2 } from "lucide-react";
+import type { Task, TaskStatus } from "../../../domain/tasks/task";
+import { Calendar, BookOpen, AlertCircle, Clock, Trash2, Edit2, Play, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
 type TaskCardProps = {
   task: Task;
   onEdit?: (task: Task) => void;
   onDelete?: (task: Task) => void;
+  onStatusChange?: (id: string, status: TaskStatus) => void;
 };
 
-export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const priorityColors = {
     high: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800/50",
     medium: "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800/50",
     low: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800/50",
+  };
+
+  const statusLabels = {
+    pending: "Pendente",
+    in_progress: "Em Andamento",
+    done: "Concluída",
   };
 
   const typeLabels = {
@@ -43,10 +51,28 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
     }
   };
 
+  const handleStatusUpdate = async (newStatus: TaskStatus) => {
+    setIsUpdating(true);
+    try {
+      const response = await fetch(`/api/tasks/${task.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...task, status: newStatus }),
+      });
+      if (response.ok) {
+        onStatusChange?.(task.id, newStatus);
+      }
+    } catch (err) {
+      console.error("Erro ao atualizar status:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
-    <article className="p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-5 group">
+    <article className={`p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-all border flex flex-col md:flex-row md:items-center justify-between gap-5 group ${task.status === 'done' ? 'opacity-60 border-slate-100 dark:border-slate-700' : 'border-slate-200 dark:border-slate-700'}`}>
       <div className="space-y-2">
-        <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <h3 className={`font-bold text-lg transition-colors ${task.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
           {task.title}
         </h3>
         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
@@ -64,16 +90,33 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         </div>
       </div>
       
-      <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
         <div className="flex gap-2 items-center">
           <span className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1 transition-colors ${priorityColors[task.priority]}`}>
             {task.priority === 'high' && <AlertCircle className="w-3.5 h-3.5" />}
             {task.priority.toUpperCase()}
           </span>
-          <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 uppercase tracking-wide flex items-center gap-1.5 transition-colors">
-            {task.status === 'pending' && <Clock className="w-3.5 h-3.5" />}
-            {task.status.replace("_", " ")}
-          </span>
+          
+          <button
+            onClick={() => {
+              if (task.status === 'pending') handleStatusUpdate('in_progress');
+              else if (task.status === 'in_progress') handleStatusUpdate('done');
+              else handleStatusUpdate('pending');
+            }}
+            disabled={isUpdating}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold border tracking-wide shadow-sm flex items-center gap-1.5 transition-all ${
+              task.status === 'done' 
+                ? 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/50'
+                : task.status === 'in_progress'
+                ? 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800/50'
+                : 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-600'
+            }`}
+          >
+            {task.status === 'pending' && <Play className="w-3 h-3 fill-current" />}
+            {task.status === 'in_progress' && <Clock className="w-3 h-3 animate-pulse" />}
+            {task.status === 'done' && <CheckCircle2 className="w-3 h-3" />}
+            {statusLabels[task.status].toUpperCase()}
+          </button>
         </div>
         
         <div className="flex gap-2 mt-2 sm:mt-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
