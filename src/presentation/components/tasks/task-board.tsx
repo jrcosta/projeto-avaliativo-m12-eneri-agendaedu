@@ -1,4 +1,4 @@
-import type { Task } from "../../../domain/tasks/task";
+import type { Task, TaskStatus } from "../../../domain/tasks/task";
 import { TaskCard } from "./task-card";
 
 type TaskBoardProps = {
