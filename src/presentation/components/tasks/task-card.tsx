@@ -1,6 +1,6 @@
 import type { Task, TaskStatus, TaskWeight, TaskUrgency, TaskType } from "../../../domain/tasks/task";
 import { Calendar, BookOpen, AlertCircle, Clock, Trash2, Edit2, Play, CheckCircle2, Info } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 // ── Score breakdown (mirrors domain/tasks/task-priority.ts) ──────────────────
 const SOON_DUE_DAYS = 3;
@@ -40,8 +40,31 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [showScore, setShowScore] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   const score = buildScoreBreakdown(task);
+
+  const handleTooltipEnter = () => {
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      const TOOLTIP_W = 224; // w-56
+      const TOOLTIP_H = 172; // altura estimada do tooltip
+      const GAP = 6;
+
+      // horizontal: alinha à direita do botão sem sair da tela
+      const left = Math.max(8, Math.min(rect.right - TOOLTIP_W, window.innerWidth - TOOLTIP_W - 8));
+
+      // vertical: abre abaixo se couber, senão abre acima
+      const spaceBelow = window.innerHeight - rect.bottom - GAP;
+      const top = spaceBelow >= TOOLTIP_H
+        ? rect.bottom + GAP
+        : rect.top - TOOLTIP_H - GAP;
+
+      setTooltipPos({ top, left });
+    }
+    setShowScore(true);
+  };
 
   const priorityColors = {
     high: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800/50",
@@ -103,8 +126,9 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
     <article className={`relative p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-all border flex flex-col md:flex-row md:items-center justify-between gap-5 group ${task.status === 'done' ? 'opacity-60 border-slate-100 dark:border-slate-700' : 'border-slate-200 dark:border-slate-700'}`}>
 
       {/* Score tooltip — canto superior direito */}
-      <div className="absolute top-3 right-3" onMouseEnter={() => setShowScore(true)} onMouseLeave={() => setShowScore(false)}>
+      <div className="absolute top-3 right-3" onMouseEnter={handleTooltipEnter} onMouseLeave={() => setShowScore(false)}>
         <button
+          ref={btnRef}
           type="button"
           className="w-5 h-5 rounded-full flex items-center justify-center text-slate-300 hover:text-blue-500 dark:text-slate-600 dark:hover:text-blue-400 transition-colors"
           aria-label="Ver cálculo de prioridade"
@@ -113,7 +137,10 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
         </button>
 
         {showScore && (
-          <div className="absolute z-50 top-full right-0 mt-1 w-56 bg-slate-900 dark:bg-slate-950 text-white text-xs rounded-xl shadow-xl p-3 pointer-events-none border border-slate-700">
+          <div
+            style={{ position: "fixed", top: tooltipPos.top, left: tooltipPos.left }}
+            className="z-[9999] w-56 bg-slate-900 dark:bg-slate-950 text-white text-xs rounded-xl shadow-xl p-3 pointer-events-none border border-slate-700"
+          >
             <p className="font-bold text-slate-200 mb-2 text-center">Cálculo de Prioridade</p>
             <div className="space-y-1 text-slate-300">
               <div className="flex justify-between">
@@ -138,8 +165,6 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardPro
               <span className="font-mono font-bold text-white">{score.total} / 12</span>
             </div>
             <p className="mt-1 text-center text-slate-400 font-mono text-[10px]">{score.threshold}</p>
-            {/* seta */}
-            <div className="absolute bottom-full right-2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-950" />
           </div>
         )}
       </div>
