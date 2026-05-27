@@ -195,3 +195,15 @@ agora crie um pr para a main como ciclo 3
 ```text
 mongo como faço?
 ```
+
+### Prompt 33 — Ajustes de Deploy Vercel
+
+```text
+não consigo importar o projeto no vercel, você pode ajustar algo para ele ficar importavel?
+```
+
+### Prompt 34 — Release Ciclo 4 (PR para Main)
+
+```text
+crie um pr da develop para main
+```
