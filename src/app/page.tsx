@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { TaskBoard } from "../presentation/components/tasks/task-board";
 import { TaskForm } from "../presentation/components/tasks/task-form";
 import { TaskStats } from "../presentation/components/tasks/task-stats";
+import { SubjectForm } from "../presentation/components/subjects/subject-form";
 import { Toast, type ToastType } from "../presentation/components/ui/toast";
 import type { Task, TaskPriority } from "../domain/tasks/task";
 import { CalendarX2, Moon, Sun, Search } from "lucide-react";
@@ -11,7 +12,7 @@ import { CalendarX2, Moon, Sun, Search } from "lucide-react";
 export default function HomePage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"list" | "create">("list");
+  const [activeTab, setActiveTab] = useState<"list" | "create" | "subjects">("list");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [taskToEdit, setTaskToEdit] = useState<Task | undefined>(undefined);
 
@@ -95,7 +96,7 @@ export default function HomePage() {
     showToast("Tarefa excluída.");
   };
 
-  const handleTabClick = (tab: "list" | "create") => {
+  const handleTabClick = (tab: "list" | "create" | "subjects") => {
     if (tab === "create" && activeTab !== "create") {
       setTaskToEdit(undefined);
     }
@@ -168,10 +169,27 @@ export default function HomePage() {
             >
               {taskToEdit ? "Editar Tarefa" : "Cadastrar Tarefa"}
             </button>
+            <button
+              onClick={() => handleTabClick("subjects")}
+              className={`flex-1 py-4 text-sm md:text-base font-semibold transition-all duration-200 ${
+                activeTab === "subjects"
+                  ? "text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-800 border-b-2 border-blue-600 dark:border-blue-400 shadow-sm"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50"
+              }`}
+            >
+              Matérias
+            </button>
           </div>
 
           <div className="p-6 md:p-8">
-            {activeTab === "create" ? (
+            {activeTab === "subjects" ? (
+              <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6 transition-colors">
+                  Gerenciar Matérias
+                </h2>
+                <SubjectForm onSubjectsChange={fetchTasks} />
+              </div>
+            ) : activeTab === "create" ? (
               <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6 transition-colors">
                   {taskToEdit ? "Editar Tarefa" : "Nova Tarefa"}

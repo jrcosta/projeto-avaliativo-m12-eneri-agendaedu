@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Task, TaskType, TaskUrgency, TaskWeight } from "../../../domain/tasks/task";
+import type { Subject } from "../../../domain/subjects/subject";
 import { AlertCircle, Loader2, Save } from "lucide-react";
 
 type TaskFormProps = {
@@ -13,8 +14,18 @@ type TaskFormProps = {
 export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [subjectsLoading, setSubjectsLoading] = useState(true);
 
   const isEditing = !!initialTask;
+
+  useEffect(() => {
+    fetch("/api/subjects", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => setSubjects(data.subjects || []))
+      .catch(() => {})
+      .finally(() => setSubjectsLoading(false));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -85,14 +96,26 @@ export function TaskForm({ initialTask, onSuccess, onCancel }: TaskFormProps) {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="subject" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Matéria</label>
-          <input 
+          <select
             id="subject"
-            name="subject" 
-            defaultValue={initialTask?.subject}
+            name="subject"
+            defaultValue={initialTask?.subject || ""}
             required
-            placeholder="Ex: História" 
-            className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
-          />
+            disabled={subjectsLoading}
+            className="p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-slate-700 dark:text-slate-100 appearance-none disabled:opacity-60"
+          >
+            <option value="" disabled>
+              {subjectsLoading ? "Carregando matérias..." : "Selecione uma matéria"}
+            </option>
+            {subjects.map((s) => (
+              <option key={s.id} value={s.name}>{s.name}</option>
+            ))}
+          </select>
+          {!subjectsLoading && subjects.length === 0 && (
+            <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+              Nenhuma matéria cadastrada. Adicione matérias na aba &quot;Matérias&quot; primeiro.
+            </p>
+          )}
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="type" className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tipo de Atividade</label>
