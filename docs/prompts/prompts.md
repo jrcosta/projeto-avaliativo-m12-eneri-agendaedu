@@ -238,8 +238,14 @@ o ci do build no github falhou
 agora crie o mr da develop para a main detalhando esse novo ciclo.
 ```
 
-### Prompt 40 — Criar roteiro do vídeo de demonstração
+### Prompt 40 — Criar modelo de entrega com links
 
 ```text
-com base no arquivo @docs\requisitos-entrega.md crie um .md de roteiro pro video
+crie um modelo de entrega, onde eu possa colocar os links para demonstrar o que é pedido no @docs\requisitos-entrega.md, links do repositório, board, deploy, github actions, etc
+```
+
+### Prompt 41 — Ajustar modelo para plain text
+
+```text
+a entrega vai ser em padrão plain text
 ```
