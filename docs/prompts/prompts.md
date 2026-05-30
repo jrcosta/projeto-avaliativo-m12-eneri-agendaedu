@@ -237,3 +237,9 @@ o ci do build no github falhou
 ```text
 agora crie o mr da develop para a main detalhando esse novo ciclo.
 ```
+
+### Prompt 40 — Criar roteiro do vídeo de demonstração
+
+```text
+com base no arquivo @docs\requisitos-entrega.md crie um .md de roteiro pro video
+```
