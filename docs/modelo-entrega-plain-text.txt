@@ -1,0 +1,174 @@
+MODELO DE ENTREGA - M1.2 (IA PARA DESENVOLVEDORES)
+
+Use este arquivo como checklist final com links de evidencia para submissao no AVA.
+
+==================================================
+1) DADOS GERAIS
+==================================================
+Nome do projeto: [preencher]
+Turma: [preencher]
+Integrantes: [preencher]
+Lider tecnico-organizacional: [preencher]
+Data de submissao: [preencher]
+
+==================================================
+2) LINKS PRINCIPAIS (AVA)
+==================================================
+Repositorio GitHub (privado): [colar link]
+Quadro GitHub (Kanban): [colar link]
+Pull Request final (develop -> main): [colar link]
+Video no YouTube (nao listado): [colar link]
+
+==================================================
+3) LINKS TECNICOS
+==================================================
+Deploy da aplicacao: [colar link]
+Swagger / OpenAPI (se aplicavel): [colar link]
+Workflow CI (lint) - GitHub Actions: [colar link]
+Workflow CI (testes) - GitHub Actions: [colar link]
+Ultima execucao CI com sucesso: [colar link]
+Cobertura de testes (relatorio/print/link): [colar link]
+
+==================================================
+4) BRANCHES OBRIGATORIAS
+==================================================
+[ ] main - evidencia: [link/print]
+[ ] develop - evidencia: [link/print]
+[ ] feature/especificacao-arquitetura - evidencia: [link/print]
+[ ] feature/geracao-codigo-ia - evidencia: [link/print]
+[ ] feature/refatoracao-ia - evidencia: [link/print]
+[ ] feature/testes-automatizados - evidencia: [link/print]
+[ ] feature/pipeline-ci-cd - evidencia: [link/print]
+[ ] docs/prompts-readme - evidencia: [link/print]
+
+==================================================
+5) CHECKLIST DE CONFORMIDADE (ITEM 7)
+==================================================
+Preencher cada linha com: Status = OK ou Pendente + Evidencia (link)
+
+Repositorio privado criado e colaboradores obrigatorios adicionados
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Estrutura com README.md, docs/prompts/ e .env.example
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Board com colunas Backlog, A Fazer, Em Andamento, Bloqueado, Em Revisao, Concluido
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Cards com descricao, objetivo, escopo e criterio de conclusao
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Minimo de 8 commits incrementais
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Fluxo main <- develop <- feature/docs seguido
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Dominio e escopo definidos com apoio de IA
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Arquitetura planejada e documentada com IA
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Tres ciclos de geracao/refinamento documentados
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Dois padroes de prompting distintos aplicados
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Prompts salvos em docs/prompts/
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Refatoracao documentada (prompt + antes/depois + criterio)
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Suite de testes gerada com IA e validada
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Pipeline CI/CD com lint e testes automaticos
+Status: [OK/Pendente]
+Evidencia: [link]
+
+README completo com itens obrigatorios
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Caso de saida incorreta da IA documentado com correcao
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Dois cenarios de uso demonstrados
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Video de ate 10 min publicado como nao listado
+Status: [OK/Pendente]
+Evidencia: [link]
+
+Links do repositorio e board enviados no AVA antes do prazo
+Status: [OK/Pendente]
+Evidencia: [link]
+
+==================================================
+6) README - VALIDACAO RAPIDA
+==================================================
+[ ] Nome da aplicacao e problema resolvido
+[ ] Dominio e escopo
+[ ] Tecnologias utilizadas
+[ ] Ferramentas de IA usadas por etapa
+[ ] Padroes de prompting aplicados
+[ ] Referencias aos prompts em docs/prompts/
+[ ] Arquitetura (diagrama ou descricao clara)
+[ ] Decisoes tecnicas justificadas
+[ ] Instalacao, configuracao e execucao
+[ ] Cenarios de uso com entrada/saida esperada
+[ ] Exemplos de saida
+[ ] Caso de saida incorreta da IA + correcao + licao aprendida
+[ ] Melhorias futuras
+[ ] Link do video
+
+==================================================
+7) ROTEIRO DE SUBMISSAO NO AVA
+==================================================
+1. Confirmar se o PR final para main foi aprovado/mergeado.
+2. Verificar se pipeline esta verde no commit final.
+3. Confirmar que o video esta como nao listado no YouTube.
+4. Colar no AVA:
+   - link do repositorio
+   - link do quadro do GitHub
+   - link do video
+   - (opcional) link do PR final
+5. Registrar data e horario da submissao: [preencher]
+
+==================================================
+8) CONTROLE FINAL
+==================================================
+Revisao tecnica final
+Responsavel: [nome]
+Situacao: [OK/Pendente]
+
+Revisao de documentacao
+Responsavel: [nome]
+Situacao: [OK/Pendente]
+
+Revisao de links
+Responsavel: [nome]
+Situacao: [OK/Pendente]
+
+Submissao no AVA
+Responsavel: [nome]
+Situacao: [OK/Pendente]
+
